@@ -57,7 +57,7 @@ interface FocusState {
   setHydrated: () => void;
 
   // tasks
-  addTask: (title: string, estimatedPomodoros?: number, note?: string) => string;
+  addTask: (title: string, estimatedPomodoros?: number, note?: string, tags?: string[]) => string;
   updateTask: (id: string, patch: Partial<Task>) => void;
   toggleTask: (id: string) => void;
   deleteTask: (id: string) => void;
@@ -65,6 +65,8 @@ interface FocusState {
   reorderTasks: (ids: string[]) => void;
   incrementTaskPomodoro: (id: string) => void;
   setCurrentTask: (id: string | null) => void;
+  addTagToTask: (id: string, tag: string) => void;
+  removeTagFromTask: (id: string, tag: string) => void;
 
   // settings
   updateSettings: (patch: Partial<Settings>) => void;
@@ -108,7 +110,7 @@ export const useFocusStore = create<FocusState>()(
 
       setHydrated: () => set({ hydrated: true }),
 
-      addTask: (title, estimatedPomodoros = 1, note) => {
+      addTask: (title, estimatedPomodoros = 1, note, tags = []) => {
         const t: Task = {
           id: uid(),
           title: title.trim() || 'Untitled task',
@@ -117,6 +119,7 @@ export const useFocusStore = create<FocusState>()(
           completedPomodoros: 0,
           done: false,
           createdAt: Date.now(),
+          tags: tags.map((tg) => tg.trim().toLowerCase()).filter(Boolean).slice(0, 5),
         };
         set((st) => ({ tasks: [...st.tasks, t] }));
         return t.id;
@@ -166,6 +169,23 @@ export const useFocusStore = create<FocusState>()(
 
       setCurrentTask: (id) =>
         set((st) => ({ runtime: { ...st.runtime, currentTaskId: id } })),
+
+      addTagToTask: (id, tag) =>
+        set((st) => ({
+          tasks: st.tasks.map((t) => {
+            if (t.id !== id) return t;
+            const clean = tag.trim().toLowerCase();
+            if (!clean || t.tags.includes(clean)) return t;
+            return { ...t, tags: [...t.tags, clean].slice(0, 5) };
+          }),
+        })),
+
+      removeTagFromTask: (id, tag) =>
+        set((st) => ({
+          tasks: st.tasks.map((t) =>
+            t.id === id ? { ...t, tags: t.tags.filter((tg) => tg !== tag) } : t,
+          ),
+        })),
 
       updateSettings: (patch) =>
         set((st) => {
@@ -353,6 +373,11 @@ export const useFocusStore = create<FocusState>()(
         // never white-screens on bad data.
         try {
           if (!Array.isArray(state.tasks)) state.tasks = [];
+          // ensure every task has a tags array (old payloads predate tags)
+          state.tasks = state.tasks.map((t) => ({
+            ...t,
+            tags: Array.isArray(t.tags) ? t.tags : [],
+          }));
           if (!Array.isArray(state.sessions)) state.sessions = [];
           if (!state.settings || typeof state.settings !== 'object') {
             state.settings = { ...DEFAULT_SETTINGS };

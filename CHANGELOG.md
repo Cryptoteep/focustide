@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (v1.2 in progress)
+### Added (v1.3 in progress)
+- 📅 **Full-year calendar heatmap** — GitHub-style 53-week × 7-day grid showing every focus session over the past year. 5-level intensity coloring, month labels, day labels, hover tooltips with per-day detail, prev/next navigation, active-days + total-minutes summary, legend.
+- 🏷️ **Task tags** — add up to 5 tags per task (Enter or comma to add). Tags render as colored hash-badges on each task row (deterministic color per tag). Tag filter bar above the task list lets you filter by any tag with an "All" reset. Empty state for filtered views. Store auto-heals old tasks without `tags` array.
+- 🛡️ **Store resilience for tags** — `onRehydrateStorage` now ensures every task has a `tags: string[]` (old v1.2 payloads get backfilled to `[]`).
+
+### Added (v1.2)
 - ⌘K **Command palette** — fuzzy-searchable access to every action (timer controls, phase switches, focus-duration presets, theme toggle, navigation, export, settings). Opens with ⌘K / Ctrl+K or the toolbar button.
 - 📊 **Insights panel** — surface your peak focus hour, most productive day of week, 7-day trend vs previous week, average session length, time-of-day distribution (morning/afternoon/evening/night), and estimate accuracy. Includes a friendly empty state.
 - 🤝 **Community CTA section** — stat strip (100% local / 0 trackers / MIT / ∞ your data), three ways to contribute (star, PR, discussion), and a gradient final-CTA card.
 - 🧭 **"Community" nav link** added to header (desktop + mobile).
+- 🛡️ **Crash-resilient store** — defensive `onRehydrateStorage` guards against corrupted/partial localStorage (validates arrays, deep-merges settings, reconstructs runtime, force-resets running state on load).
+- 🛡️ **Error boundary** — top-level React error boundary with calm recovery screen + "Reset local data" button (no telemetry).
 
 ### Added (v1.1)
 - 🎵 **Ambient soundscape player** — six procedurally-synthesized ambient sounds (rain, ocean waves, white noise, brown noise, cafe murmur, forest birds) via the Web Audio API. Zero audio files, zero network. Popover with volume slider and live indicator.

@@ -9,6 +9,7 @@ export interface Task {
   done: boolean;
   createdAt: number;
   completedAt?: number;
+  tags: string[];
 }
 
 export interface Session {

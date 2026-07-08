@@ -158,3 +158,56 @@ Unresolved / Next-phase priorities:
 - **OG image**: add `public/og.png` for link previews.
 - **i18n** (v1.2): start with `ru`.
 - **Tags & per-tag analytics** (v1.1): tag tasks, filter analytics by tag.
+
+---
+Task ID: 4
+Agent: Z.ai Code (cron webDevReview #3)
+Task: Recurring QA + v1.3 features (full-year calendar heatmap, task tags) + styling polish.
+
+Work Log:
+- Read worklog Tasks 1-3 — project at v1.2 (command palette, insights, community CTA, crash-resilience; 4 commits on GitHub).
+- **QA via agent-browser** (desktop 1440×900 + mobile 375×812):
+  - Fresh state: lint clean, 0 console errors, 0 dev.log errors.
+  - Task add via keyboard type + Enter → persisted ("Review PR #42").
+  - Timer: Space toggles (after Tab blur from input), running:true, wall-clock accurate (1497s remaining), persists.
+  - Injected 10 sessions across days → Analytics renders charts + insights (peak 09:00, day Mon, trend +100%, avg 25m, time-of-day distribution correct).
+  - Mobile: no horizontal overflow (375=375).
+  - No bugs found — project stable.
+
+- **NEW FEATURES (v1.3):**
+  1. **📅 Full-year calendar heatmap** (`calendar-heatmap.tsx`): GitHub-style 53-week × 7-day grid ending at the current week. 5-level intensity coloring (0 / <25 / <50 / <100 / ≥100 min). Month labels at week starts, Mon/Wed/Fri day labels. Hover any cell → detail row shows date + minutes + sessions. Prev/next navigation (shifts 4 weeks = ~1 month), forward disabled past today. Summary: active days + total minutes. Legend (Less→More). Horizontal scroll on mobile via `overflow-x-auto ft-scroll`. Verified with 40 injected sessions across 80 days: renders "40 active days · 16h 40m focused", all 12 month labels, intensity cells.
+  2. **🏷️ Task tags** (`task-list.tsx` + store): 
+     - `Task.tags: string[]` added to types.
+     - Store `addTask(title, est, note, tags?)` — normalizes to lowercase, max 5.
+     - Store `addTagToTask` / `removeTagFromTask` methods.
+     - `onRehydrateStorage` backfills `tags: []` on old tasks.
+     - UI: tag input (Enter/comma to add) with pending-tag badges below the title input; colored hash-badges on each task row (deterministic hash-based color from 5-palette: brand/amber/violet/emerald/rose).
+     - Tag filter bar: "All" + one chip per unique tag; click to filter open + done tasks; empty state when filter yields no tasks.
+     - Verified: 3 tasks with tags [feature,frontend], [bug,backend], [docs] → all 5 tags appear in filter bar; clicking #docs shows only "Write docs"; "All" resets.
+
+- **Styling polish:**
+  - Calendar heatmap: 13×13px rounded cells with 3px gaps, Framer Motion `whileHover` scale 1.4, opacity-30 for out-of-range future days, themed legend.
+  - Task tags: 9px font, px-1.5 py-px badges with border, wrapped flex layout, hover ring on active filter chip.
+  - Tag input: dashed border, h-7 compact size, Hash icon prefix.
+
+- **Verification (agent-browser):**
+  - Calendar heatmap renders in Analytics tab with 40 sessions: "Focus calendar · 40 active days · 16h 40m focused", month labels Jul→Jul, day labels Mon/Wed/Fri.
+  - Insights still renders correctly (peak 09:00, day Mon, 16h40m total, estimate accuracy 5/9=56%).
+  - Tags: all 5 tags visible on tasks + filter bar; #docs filter → only "Write docs" visible; "All" resets.
+  - Lint clean, 0 console errors, 0 dev.log errors.
+  - Mobile: no overflow (375=375), calendar has horizontal scroll container.
+
+Stage Summary:
+- **Status**: stable, v1.3 features (calendar heatmap + task tags) shipped locally.
+- **Quality**: lint clean; agent-browser QA passed on desktop + mobile; store backwards-compatible (old tasks get tags:[]).
+- **New artifacts**: `src/components/focustide/calendar-heatmap.tsx`; modified `task-list.tsx` (tags UI + filter), `store.ts` (tag methods + rehydrate), `types.ts` (Task.tags), `analytics.tsx` (CalendarHeatmap integration), `CHANGELOG.md`.
+- **GitHub**: pending push as commit "feat(v1.3): full-year calendar heatmap + task tags with filter".
+
+Unresolved / Next-phase priorities:
+- **Push v1.3 to GitHub** via the upload script (this round).
+- **PWA shell** (v1.1 remaining): manifest + service worker (good-first-issue #1).
+- **Trim unused deps** (good-first-issue #3): remove prisma/next-auth/next-intl/z-ai-web-dev-sdk.
+- **OG image**: add `public/og.png` for link previews.
+- **i18n** (v1.2): start with `ru`.
+- **Per-tag analytics**: extend insights to break down focus time by tag.
+- **Keyboard shortcut for tag input**: wire `N` to focus the title input (already done), consider `T` for tag input.
