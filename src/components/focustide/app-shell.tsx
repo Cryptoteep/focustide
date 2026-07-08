@@ -13,6 +13,7 @@ import { DailyGoalCard } from './daily-goal-card';
 import { SettingsDialog } from './settings-dialog';
 import { ExportMenu } from './export-menu';
 import { SoundscapePlayer } from './soundscape-player';
+import { CommandPalette } from './command-palette';
 import { useTimerEngine } from '@/hooks/use-timer-engine';
 import { useFocusStore } from '@/lib/store';
 import { applyAccent } from '@/lib/sound';
@@ -40,6 +41,15 @@ export function AppShell() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('focustide:command-palette'))}
+              className="hidden items-center gap-2 rounded-lg border border-border/60 bg-card/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-brand/40 hover:text-foreground sm:flex"
+              aria-label="Open command palette"
+            >
+              <span className="text-muted-foreground/70">⌘</span>
+              <span>K</span>
+              <span className="ml-1 hidden lg:inline">· command palette</span>
+            </button>
             <SoundscapePlayer />
             <SettingsDialog />
             <ExportMenu />
@@ -111,6 +121,7 @@ export function AppShell() {
           </div>
         </div>
       </div>
+      <CommandPalette />
     </section>
   );
 }

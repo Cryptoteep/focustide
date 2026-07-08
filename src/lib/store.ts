@@ -347,7 +347,44 @@ export const useFocusStore = create<FocusState>()(
         runtime: s.runtime,
       }),
       onRehydrateStorage: () => (state) => {
-        state?.setHydrated();
+        if (!state) return;
+        // Defensive: guard against corrupted / partial / old localStorage payloads.
+        // Any missing or malformed slice is replaced with a safe default so the app
+        // never white-screens on bad data.
+        try {
+          if (!Array.isArray(state.tasks)) state.tasks = [];
+          if (!Array.isArray(state.sessions)) state.sessions = [];
+          if (!state.settings || typeof state.settings !== 'object') {
+            state.settings = { ...DEFAULT_SETTINGS };
+          } else {
+            // merge in any new default fields that might be missing from an old payload
+            state.settings = { ...DEFAULT_SETTINGS, ...state.settings };
+          }
+          if (!state.runtime || typeof state.runtime !== 'object') {
+            state.runtime = freshRuntime(state.settings);
+          } else {
+            // ensure required fields exist; reset running state on load (never resume
+            // a "running" timer from a previous session — it would be stale)
+            const rt = state.runtime as TimerRuntime;
+            state.runtime = {
+              phase: rt.phase === 'short-break' || rt.phase === 'long-break' ? rt.phase : 'focus',
+              running: false,
+              totalSeconds:
+                typeof rt.totalSeconds === 'number' && rt.totalSeconds > 0
+                  ? rt.totalSeconds
+                  : Math.round(minutesFor(rt.phase ?? 'focus', state.settings) * 60),
+              endsAt: null,
+              cycleCount: typeof rt.cycleCount === 'number' ? rt.cycleCount : 0,
+              currentTaskId: typeof rt.currentTaskId === 'string' ? rt.currentTaskId : null,
+            };
+          }
+        } catch {
+          state.tasks = [];
+          state.sessions = [];
+          state.settings = { ...DEFAULT_SETTINGS };
+          state.runtime = freshRuntime(DEFAULT_SETTINGS);
+        }
+        state.setHydrated();
       },
     },
   ),

@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (v1.1 in progress)
+### Added (v1.2 in progress)
+- ⌘K **Command palette** — fuzzy-searchable access to every action (timer controls, phase switches, focus-duration presets, theme toggle, navigation, export, settings). Opens with ⌘K / Ctrl+K or the toolbar button.
+- 📊 **Insights panel** — surface your peak focus hour, most productive day of week, 7-day trend vs previous week, average session length, time-of-day distribution (morning/afternoon/evening/night), and estimate accuracy. Includes a friendly empty state.
+- 🤝 **Community CTA section** — stat strip (100% local / 0 trackers / MIT / ∞ your data), three ways to contribute (star, PR, discussion), and a gradient final-CTA card.
+- 🧭 **"Community" nav link** added to header (desktop + mobile).
+
+### Added (v1.1)
 - 🎵 **Ambient soundscape player** — six procedurally-synthesized ambient sounds (rain, ocean waves, white noise, brown noise, cafe murmur, forest birds) via the Web Audio API. Zero audio files, zero network. Popover with volume slider and live indicator.
 - 🎯 **Daily focus goal** with a live animated progress ring, quick presets (1h/1.5h/2h/3h/4h), and a celebratory toast when the goal is reached.
 - ⚡ **Quick-start presets** on the timer (15/25/50/90 min) for one-tap focus sessions.

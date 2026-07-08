@@ -38,6 +38,7 @@ export function SiteHeader() {
           <NavLink href="#features">Features</NavLink>
           <NavLink href="#analytics">Analytics</NavLink>
           <NavLink href="#roadmap">Roadmap</NavLink>
+          <NavLink href="#community">Community</NavLink>
           <NavLink href="#faq">FAQ</NavLink>
         </nav>
 
@@ -84,6 +85,9 @@ export function SiteHeader() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="#roadmap">Roadmap</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="#community">Community</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="#faq">FAQ</Link>

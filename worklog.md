@@ -100,3 +100,61 @@ Unresolved / Next-phase priorities:
 - **OG image**: add `public/og.png` for better link previews.
 - **Command palette (⌘K)** (v1.2): quick access to all actions.
 - **i18n** (v1.2): start with `ru`.
+
+---
+Task ID: 3
+Agent: Z.ai Code (cron webDevReview #2)
+Task: Recurring QA + v1.2 features (command palette, insights) + styling polish + crash-resilience fix.
+
+Work Log:
+- Read worklog Tasks 1+2 — project at v1.1 (4 new features, lint clean, 3 commits on GitHub).
+- **QA via agent-browser** (desktop 1440×900 + mobile 375×812):
+  - Fresh state: lint clean, 0 console errors, 0 dev.log errors.
+  - Daily goal: injected 130min session → goal reached toast fired ("Daily goal reached! 🎯 2h 10m"), ring showed correct %, presets work.
+  - Analytics empty state: renders "No analytics yet" with friendly copy.
+  - **BUG FOUND (critical)**: injecting `runtime: null` into localStorage → **white screen / client-side exception**. The store's `onRehydrateStorage` only called `setHydrated()` without validating the shape, so any corrupted/partial payload crashed components reading `runtime.phase`.
+  - **BUG FOUND (compile/runtime)**: `insights-panel.tsx` used `<Sun />` icon without importing it → "Sun is not defined" runtime crash (passed lint because eslint didn't flag the JSX reference as undefined in that config). Error boundary caught it.
+
+- **FIX 1 — Crash-resilient store** (`src/lib/store.ts`):
+  - Rewrote `onRehydrateStorage` with defensive guards: validates `tasks`/`sessions` are arrays, deep-merges `settings` against `DEFAULT_SETTINGS` (so old payloads get new fields like `dailyGoalMinutes`), reconstructs `runtime` if missing/malformed, force-resets `running:false` + `endsAt:null` on load (never resume a stale timer). Wrapped in try/catch as last-resort fallback to full defaults.
+  - Verified: `runtime: null` no longer crashes — page renders OK, store auto-heals to `phase:focus, running:false`.
+- **FIX 2 — Error boundary** (`src/components/focustide/error-boundary.tsx`):
+  - Top-level React error boundary wrapping `{children}` in `layout.tsx`. On any render throw: shows a calm recovery screen with the error message, "Reload" and "Reset local data" (clears `focustide:v1` + reloads) buttons. No telemetry. Caught the `Sun is not defined` crash during testing (proving it works).
+- **FIX 3 — insights-panel import** (`insights-panel.tsx`): added `Sun` to the lucide import list; removed unused `aggregateByDay`, `toDayKey`, `cn` imports.
+
+- **NEW FEATURES (v1.2):**
+  1. **⌘K Command palette** (`command-palette.tsx`): 18 actions across 5 groups (Timer, Presets, Navigate, Theme, Data). Opens via ⌘K/Ctrl+K or a toolbar button (`window.dispatchEvent` custom event). Fuzzy search via cmdk. Verified: typing "theme" filters to "Switch to light theme"; typing "50" filters to the 50-min preset. Shortcuts shown inline.
+  2. **📊 Insights panel** (`insights-panel.tsx`): peak focus hour, most productive day-of-week, 7-day trend vs previous week (+/- %), average session length, time-of-day distribution (morning/afternoon/evening/night bars), estimate accuracy (completed/estimated pomodoros with adaptive message). Friendly empty state. Verified with 7 injected sessions across hours/days: peak 09:00, day Tue, trend +100%, avg 25m, morning 1h15m / afternoon 1h15m / evening 25m.
+  3. **🤝 Community CTA section** (`community-cta.tsx`): stat strip (100% local / 0 trackers / MIT / ∞ your data), three ways-to-contribute cards (star, PR, discussion), gradient final-CTA card with glow blobs. Scroll-triggered Framer Motion.
+  4. **🧭 "Community" nav link** in header (desktop + mobile dropdown).
+
+- **Styling polish:**
+  - New `WaveDivider` component (inline SVG wave, themeable, flippable) — available for section transitions.
+  - Command palette toolbar button shows `⌘ K · command palette` on lg screens.
+  - Community CTA: radial-gradient backdrop + grid overlay + glassmorphism cards with hover lift.
+  - Insights: animated time-of-day bars with Framer Motion width transitions, color-coded by slot.
+
+- **Verification (agent-browser):**
+  - ⌘K button present + opens palette (18 items in 5 groups).
+  - Fuzzy search: "theme"→1 result, "50"→1 result.
+  - Community section renders with 4 stats + 3 contribution cards + final CTA.
+  - Community nav link present (desktop + mobile).
+  - Insights panel: 4 stat cards + time-of-day bars + estimate accuracy all render with data; empty state renders without data.
+  - **Crash-resilience verified**: `runtime: null` in localStorage → page still renders (store self-heals).
+  - Mobile: no horizontal overflow (375=375), community CTA renders.
+  - Lint clean, 0 console errors after fixes.
+
+Stage Summary:
+- **Status**: stable, v1.2 features shipped, 2 critical crash bugs fixed (corrupted localStorage + missing icon import).
+- **Quality**: lint clean; agent-browser QA passed; store now defensive against bad data; error boundary as safety net.
+- **New artifacts**: `src/components/focustide/{command-palette,insights-panel,community-cta,wave-divider,error-boundary}.tsx`; modified `store.ts` (safe rehydrate), `layout.tsx` (ErrorBoundary), `analytics.tsx` (InsightsPanel integration), `app-shell.tsx` (⌘K button + CommandPalette), `site-header.tsx` (Community nav), `page.tsx` (CommunityCTA), `insights-panel.tsx` (import fix), `CHANGELOG.md`.
+- **GitHub**: pending push as commit "feat(v1.2): command palette, insights, community CTA + crash-resilience fix".
+
+Unresolved / Next-phase priorities:
+- **Push v1.2 to GitHub** via the upload script (this round).
+- **PWA shell** (v1.1 remaining): manifest + service worker (good-first-issue #1).
+- **Calendar heatmap** (v1.1 remaining): full-year GitHub-style heatmap.
+- **Trim unused deps** (good-first-issue #3): remove prisma/next-auth/next-intl/z-ai-web-dev-sdk.
+- **OG image**: add `public/og.png` for link previews.
+- **i18n** (v1.2): start with `ru`.
+- **Tags & per-tag analytics** (v1.1): tag tasks, filter analytics by tag.

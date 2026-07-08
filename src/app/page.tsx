@@ -7,6 +7,7 @@ import { Features } from '@/components/focustide/features';
 import { AppShell } from '@/components/focustide/app-shell';
 import { Roadmap } from '@/components/focustide/roadmap';
 import { FAQ } from '@/components/focustide/faq';
+import { CommunityCTA } from '@/components/focustide/community-cta';
 import { SiteFooter, NewsletterStrip } from '@/components/focustide/site-footer';
 import { KeyboardShortcuts } from '@/components/focustide/keyboard-shortcuts';
 
@@ -21,6 +22,7 @@ export default function Home() {
         <Features />
         <Roadmap />
         <FAQ />
+        <CommunityCTA />
         <NewsletterStrip />
       </main>
       <SiteFooter />

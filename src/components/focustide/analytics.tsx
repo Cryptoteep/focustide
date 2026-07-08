@@ -19,6 +19,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFocusStore } from '@/lib/store';
 import { aggregateByDay, aggregateByPhase, hourHistogram, formatMinutes } from '@/lib/stats';
+import { InsightsPanel } from './insights-panel';
 
 const PHASE_COLORS: Record<string, string> = {
   focus: 'var(--brand)',
@@ -176,6 +177,8 @@ export function Analytics() {
           </CardContent>
         </Card>
       </div>
+
+      <InsightsPanel />
 
       <SessionLog />
     </div>
