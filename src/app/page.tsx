@@ -10,6 +10,7 @@ import { FAQ } from '@/components/focustide/faq';
 import { CommunityCTA } from '@/components/focustide/community-cta';
 import { SiteFooter, NewsletterStrip } from '@/components/focustide/site-footer';
 import { KeyboardShortcuts } from '@/components/focustide/keyboard-shortcuts';
+import { InstallPrompt } from '@/components/focustide/install-prompt';
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
       </main>
       <SiteFooter />
       <KeyboardShortcuts />
+      <InstallPrompt />
     </div>
   );
 }

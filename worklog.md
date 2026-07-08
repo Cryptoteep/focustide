@@ -211,3 +211,59 @@ Unresolved / Next-phase priorities:
 - **i18n** (v1.2): start with `ru`.
 - **Per-tag analytics**: extend insights to break down focus time by tag.
 - **Keyboard shortcut for tag input**: wire `N` to focus the title input (already done), consider `T` for tag input.
+
+---
+Task ID: 5
+Agent: Z.ai Code (cron webDevReview #4)
+Task: Recurring QA + v1.4 features (PWA shell, per-tag analytics) + bugfix.
+
+Work Log:
+- Read worklog Tasks 1-4 — project at v1.3 (calendar heatmap + task tags; 5 commits on GitHub).
+- **QA via agent-browser** (desktop 1440×900):
+  - Fresh state: lint clean, 0 console errors, 0 dev.log errors.
+  - Calendar heatmap navigation: prev button → "18 active days · 7h 30m focused" (correct, shows earlier window); next → back to current. 0 errors.
+  - Tag filter: #backend → shows "Refactor core" (only open task with backend tag; "Fix auth bug" is in completed section). "All" resets correctly.
+  - Tag input flow: type title → focus tag input → type "urgent" → Enter → pending badge shows → submit → task persisted with `tags:["urgent"]`. End-to-end works.
+  - No bugs found in v1.3 — project stable.
+
+- **NEW FEATURES (v1.4):**
+  1. **📱 PWA shell** — installable, offline-ready:
+     - `/public/icon.svg`: custom FocusTide wave icon (gradient teal bg, 3 stylized tide waves, focus dot).
+     - Generated PNG icons via cairosvg: 32×32 (favicon), 180×180 (apple-touch), 192×192, 512×512.
+     - `/public/manifest.webmanifest`: name, short_name, description, start_url, standalone display, theme_color (#0fb5a8), background_color (#0a0f14), icons (SVG + 192/512 maskable), app shortcut ("Start focus tide").
+     - `/public/sw.js`: service worker. Network-first for navigation (falls back to cached shell / offline.html), cache-first for static assets, version-keyed cache (`focustide-v1.4`) with cleanup on activate. **Privacy invariant upheld**: no outbound requests beyond caching own assets, no background sync, no push.
+     - `/public/offline.html`: calm offline page with wave icon, "You're offline" message, reload button.
+     - `sw-register.tsx`: registers SW only in production (avoids stale-cache in dev).
+     - `install-prompt.tsx`: dismissable install banner on `beforeinstallprompt`, remembers dismissal in localStorage, success toast on accept.
+     - `layout.tsx`: manifest link, apple-touch-icon, apple-web-app meta (capable, title, statusBarStyle), SVG + PNG icon links.
+     - Verified: `<link rel="manifest">` present in head, apple-touch-icon present, SVG icon present.
+  2. **📊 Per-tag analytics** (`tag-breakdown.tsx`): "Focus by tag" card in Analytics. Aggregates focus minutes + sessions + tasks per tag (via taskId→tags lookup). Animated horizontal bars with deterministic tag colors (8-color palette), percentage shares, top-8 with "+N more" overflow. Hidden when no tagged sessions. Verified with 20 sessions across 3 tagged tasks: feature 21% / frontend 21% / bug 21% / backend 21% / docs 18%, total 14h 10m tagged.
+
+- **BUGFIX:**
+  - `tag-breakdown.tsx` imported `Tag2` from lucide-react — that export doesn't exist (should be `Tags`). Caused 500 compile error + dev server crash (Turbopack OOM'd on the failed compile). Fixed import to `Tags`. Also removed unused `cn` import.
+
+- **Styling polish:**
+  - Install prompt: fixed bottom-right, glassmorphism card, brand gradient icon, dismiss X button.
+  - Tag breakdown: 2.5px gap bars, 10px share percentage, colored dot + hash label, session/task count in muted text.
+  - Offline page: dark theme, centered card, wave emoji icon, reload button.
+
+- **Verification (agent-browser):**
+  - PWA: manifest link present, apple-touch-icon present, SVG icon present.
+  - Tag breakdown: renders with 5 tags, correct minutes/sessions/tasks/percentages, animated bars.
+  - 0 console errors after bugfix.
+  - Lint clean.
+  - Note: dev server experienced OOM crashes during heavy recompiles (13-16s compile times) — environment constraint, not a code issue. Restored by restart.
+
+Stage Summary:
+- **Status**: stable, v1.4 features (PWA shell + per-tag analytics) shipped locally.
+- **Quality**: lint clean; agent-browser QA passed; PWA head links verified; tag breakdown verified with data; 1 bugfix (Tag2→Tags).
+- **New artifacts**: `public/{icon.svg,icon-192.png,icon-512.png,icon-180.png,apple-touch-icon.png,favicon-32.png,manifest.webmanifest,sw.js,offline.html}`, `src/components/focustide/{sw-register,install-prompt,tag-breakdown}.tsx`; modified `layout.tsx` (PWA meta), `analytics.tsx` (TagBreakdown), `page.tsx` (InstallPrompt), `tag-breakdown.tsx` (bugfix), `CHANGELOG.md`.
+- **GitHub**: pending push as commit "feat(v1.4): PWA shell + per-tag analytics".
+
+Unresolved / Next-phase priorities:
+- **Push v1.4 to GitHub** via the upload script (this round).
+- **Trim unused deps** (good-first-issue #3): remove prisma/next-auth/next-intl/z-ai-web-dev-sdk — will also reduce compile time / memory pressure.
+- **OG image**: add `public/og.png` for link previews.
+- **i18n** (v1.2): start with `ru`.
+- **Dev server stability**: the 13-16s compile times + OOM crashes suggest Turbopack is memory-constrained; trimming deps should help. Consider switching to webpack for dev if it persists.
+- **Keyboard shortcut `T` for tag input**: wire focus to the tag input.

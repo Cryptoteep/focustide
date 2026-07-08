@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (v1.3 in progress)
+### Added (v1.4 in progress)
+- 📱 **PWA shell** — installable, offline-ready. Web app manifest (`/manifest.webmanifest`) with name, icons (SVG + 192/512 PNG), shortcuts, standalone display, theme colors. Service worker (`/sw.js`) with network-first navigation + cache-first static assets, version-keyed cache cleanup. Custom offline page (`/offline.html`). SW registered only in production (dev-friendly). Custom FocusTide wave icon (`/public/icon.svg` + generated PNG sizes 32/180/192/512). Apple touch icon + apple-web-app meta. Install-prompt banner component (dismissable, remembered in localStorage).
+- 📊 **Per-tag analytics** (`tag-breakdown.tsx`) — "Focus by tag" card in Analytics showing focus minutes, session count, task count, and percentage share per tag. Animated horizontal bars, deterministic tag colors, top-8 with overflow indicator. Hidden when no tagged sessions exist.
+- 🛡️ **Bugfix: `Tag2` icon** — lucide-react export name was wrong (`Tag2` → `Tags`), caused 500 compile error. Fixed.
+
+### Added (v1.3)
 - 📅 **Full-year calendar heatmap** — GitHub-style 53-week × 7-day grid showing every focus session over the past year. 5-level intensity coloring, month labels, day labels, hover tooltips with per-day detail, prev/next navigation, active-days + total-minutes summary, legend.
 - 🏷️ **Task tags** — add up to 5 tags per task (Enter or comma to add). Tags render as colored hash-badges on each task row (deterministic color per tag). Tag filter bar above the task list lets you filter by any tag with an "All" reset. Empty state for filtered views. Store auto-heals old tasks without `tags` array.
 - 🛡️ **Store resilience for tags** — `onRehydrateStorage` now ensures every task has a `tags: string[]` (old v1.2 payloads get backfilled to `[]`).

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ErrorBoundary } from "@/components/focustide/error-boundary";
+import { ServiceWorkerRegister } from "@/components/focustide/sw-register";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,7 +56,17 @@ export const metadata: Metadata = {
       "Privacy-first, open-source focus timer & deep-work analytics for developers.",
   },
   icons: {
-    icon: "/logo.svg",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "FocusTide",
+    statusBarStyle: "black-translucent",
   },
 };
 
@@ -87,6 +98,7 @@ export default function RootLayout({
           <ErrorBoundary>
             {children}
           </ErrorBoundary>
+          <ServiceWorkerRegister />
           <Toaster />
           <SonnerToaster position="bottom-right" richColors closeButton />
         </ThemeProvider>

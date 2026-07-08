@@ -21,6 +21,7 @@ import { useFocusStore } from '@/lib/store';
 import { aggregateByDay, aggregateByPhase, hourHistogram, formatMinutes } from '@/lib/stats';
 import { InsightsPanel } from './insights-panel';
 import { CalendarHeatmap } from './calendar-heatmap';
+import { TagBreakdown } from './tag-breakdown';
 
 const PHASE_COLORS: Record<string, string> = {
   focus: 'var(--brand)',
@@ -182,6 +183,8 @@ export function Analytics() {
       <InsightsPanel />
 
       <CalendarHeatmap />
+
+      <TagBreakdown />
 
       <SessionLog />
     </div>
