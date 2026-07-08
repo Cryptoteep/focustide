@@ -1,0 +1,65 @@
+name: 🐛 Bug report
+description: Report something that isn't working as expected
+title: "[bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug! FocusTide is local-first, so a
+        screenshot of your browser's Network tab (showing no outbound requests) is
+        often helpful context.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the unexpected behavior.
+      placeholder: "When I press Space, the timer…"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: What you thought would happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal reproduction steps.
+      placeholder: |
+        1. Open the app
+        2. Click on …
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & OS
+      placeholder: "Chrome 126 on macOS 14"
+    validations:
+      required: true
+  - type: dropdown
+    id: incognito
+    attributes:
+      label: Does it reproduce in an incognito window?
+      options:
+        - "Yes"
+        - "No"
+        - "Haven't checked"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console / Network tab output
+      description: Paste any console errors or unexpected network requests. (Redact anything sensitive.)
+      render: shell
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else? Screenshots, workarounds you tried, etc.

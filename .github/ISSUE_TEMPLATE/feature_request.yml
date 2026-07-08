@@ -1,0 +1,44 @@
+name: 💡 Feature request
+description: Suggest an idea for FocusTide
+title: "[feat]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing an idea! Explain the **use case** — what problem does
+        this solve for you? Solutions are welcome but optional; the maintainer
+        team is happy to help shape the design.
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do that FocusTide doesn't let you do today?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Your proposed solution
+      description: How might FocusTide solve this? (Optional — a clear problem is enough.)
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Workarounds, other tools, anything else you tried.
+  - type: dropdown
+    id: privacy
+    attributes:
+      label: Does this require any network access?
+      description: FocusTide's core promise is zero outbound requests after first load.
+      options:
+        - "No — stays fully local"
+        - "Yes, but opt-in and clearly disclosed"
+        - "Not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, mockups, links to similar features elsewhere, etc.
