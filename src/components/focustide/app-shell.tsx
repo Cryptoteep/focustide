@@ -9,8 +9,10 @@ import { TaskList } from './task-list';
 import { Analytics } from './analytics';
 import { StreakCard } from './streak-card';
 import { StatsCards } from './stats-cards';
+import { DailyGoalCard } from './daily-goal-card';
 import { SettingsDialog } from './settings-dialog';
 import { ExportMenu } from './export-menu';
+import { SoundscapePlayer } from './soundscape-player';
 import { useTimerEngine } from '@/hooks/use-timer-engine';
 import { useFocusStore } from '@/lib/store';
 import { applyAccent } from '@/lib/sound';
@@ -37,7 +39,8 @@ export function AppShell() {
               timer, tasks and history will be right where you left them.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <SoundscapePlayer />
             <SettingsDialog />
             <ExportMenu />
           </div>
@@ -85,7 +88,8 @@ export function AppShell() {
                         </div>
                       </CardContent>
                     </Card>
-                    <div className="sm:col-span-2">
+                    <div className="sm:col-span-2 space-y-4">
+                      <DailyGoalCard />
                       <StreakCard />
                     </div>
                   </div>

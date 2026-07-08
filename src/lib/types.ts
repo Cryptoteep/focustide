@@ -39,6 +39,8 @@ export interface Settings {
   accent: AccentPreset;
   /** Show seconds in tab title */
   showSecondsInTitle: boolean;
+  /** Daily focus-time goal in minutes */
+  dailyGoalMinutes: number;
 }
 
 export type AccentPreset = "tide" | "emerald" | "violet" | "amber" | "rose";

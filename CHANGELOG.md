@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned (v1.1)
+### Added (v1.1 in progress)
+- 🎵 **Ambient soundscape player** — six procedurally-synthesized ambient sounds (rain, ocean waves, white noise, brown noise, cafe murmur, forest birds) via the Web Audio API. Zero audio files, zero network. Popover with volume slider and live indicator.
+- 🎯 **Daily focus goal** with a live animated progress ring, quick presets (1h/1.5h/2h/3h/4h), and a celebratory toast when the goal is reached.
+- ⚡ **Quick-start presets** on the timer (15/25/50/90 min) for one-tap focus sessions.
+- 📖 **"How it works" section** — three-step onboarding (Start a tide → Link a task → Watch it compound) with connecting timeline.
+- ✨ **Timer visual polish** — animated outer glow that intensifies while running, 60 rotating tick marks, SVG glow filter on the progress ring.
+
+### Planned (v1.1 remaining)
 - Calendar heatmap (GitHub-style, full year)
-- Ambient soundscape player (rain, waves, cafe)
 - PWA install + offline shell
 - Tags & per-tag analytics
 

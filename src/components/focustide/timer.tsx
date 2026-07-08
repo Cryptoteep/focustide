@@ -53,6 +53,16 @@ export function Timer() {
     }
   }, []);
 
+  const FOCUS_PRESETS = [15, 25, 50, 90];
+  const updateSettings = useFocusStore((s) => s.updateSettings);
+  const setPreset = React.useCallback(
+    (mins: number) => {
+      updateSettings({ focusMinutes: mins });
+      toast.success(`Focus tide set to ${mins} min`);
+    },
+    [updateSettings],
+  );
+
   return (
     <div className="flex flex-col items-center">
       {/* Phase tabs */}
@@ -79,17 +89,48 @@ export function Timer() {
 
       {/* Ring */}
       <div className="relative grid place-items-center" style={{ width: size, height: size }}>
+        {/* outer glow */}
         <div
-          className="absolute inset-6 rounded-full opacity-40 blur-2xl transition-colors"
-          style={{ background: ringColor }}
+          className={cn(
+            'absolute inset-4 rounded-full blur-3xl transition-opacity duration-700',
+            runtime.running ? 'opacity-50' : 'opacity-25',
+          )}
+          style={{ background: `radial-gradient(circle, ${ringColor} 0%, transparent 70%)` }}
           aria-hidden
         />
-        <svg width={size} height={size} className="-rotate-90">
+        {/* subtle rotating tick marks */}
+        <svg viewBox="0 0 280 280" className="absolute inset-0 h-full w-full animate-ring-rotate opacity-20" aria-hidden>
+          {Array.from({ length: 60 }).map((_, i) => {
+            const angle = (i / 60) * 2 * Math.PI;
+            const inner = i % 5 === 0 ? 122 : 126;
+            const outer = 132;
+            return (
+              <line
+                key={i}
+                x1={140 + Math.cos(angle) * inner}
+                y1={140 + Math.sin(angle) * inner}
+                x2={140 + Math.cos(angle) * outer}
+                y2={140 + Math.sin(angle) * outer}
+                stroke="currentColor"
+                strokeWidth={i % 5 === 0 ? 1.5 : 0.75}
+                className="text-foreground"
+              />
+            );
+          })}
+        </svg>
+        <svg width={size} height={size} className="-rotate-90 relative">
           <defs>
             <linearGradient id="ft-grad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor={ringColor} />
               <stop offset="100%" stopColor="var(--chart-2)" />
             </linearGradient>
+            <filter id="ft-glow">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
           <circle
             cx={size / 2}
@@ -111,6 +152,7 @@ export function Timer() {
             strokeDasharray={c}
             animate={{ strokeDashoffset: c * (1 - progress) }}
             transition={{ duration: 0.4, ease: 'linear' }}
+            filter="url(#ft-glow)"
           />
         </svg>
 
@@ -118,7 +160,10 @@ export function Timer() {
           <span className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
             {PHASE_META[runtime.phase].label}
           </span>
-          <span className="mt-1 font-mono text-6xl font-bold tabular-nums tracking-tight sm:text-7xl">
+          <span className={cn(
+            'mt-1 font-mono text-6xl font-bold tabular-nums tracking-tight sm:text-7xl transition-transform',
+            runtime.running && 'scale-100',
+          )}>
             {formatClock(remaining)}
           </span>
           <div className="mt-3 flex items-center gap-1.5">
@@ -140,6 +185,31 @@ export function Timer() {
           </span>
         </div>
       </div>
+
+      {/* Quick presets (only on focus phase, idle) */}
+      {isFocus && !runtime.running && (
+        <motion.div
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-5 flex items-center gap-1.5"
+        >
+          <span className="mr-1 text-[11px] text-muted-foreground">Quick start</span>
+          {FOCUS_PRESETS.map((m) => (
+            <button
+              key={m}
+              onClick={() => setPreset(m)}
+              className={cn(
+                'rounded-full border px-2.5 py-0.5 text-[11px] font-medium tabular-nums transition-all',
+                settings.focusMinutes === m
+                  ? 'border-brand bg-brand text-brand-foreground'
+                  : 'border-border/60 text-muted-foreground hover:border-brand/40 hover:text-foreground',
+              )}
+            >
+              {m}m
+            </button>
+          ))}
+        </motion.div>
+      )}
 
       {/* Controls */}
       <div className="mt-8 flex items-center gap-3">

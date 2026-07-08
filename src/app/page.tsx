@@ -2,6 +2,7 @@
 
 import { SiteHeader } from '@/components/focustide/site-header';
 import { Hero } from '@/components/focustide/hero';
+import { HowItWorks } from '@/components/focustide/how-it-works';
 import { Features } from '@/components/focustide/features';
 import { AppShell } from '@/components/focustide/app-shell';
 import { Roadmap } from '@/components/focustide/roadmap';
@@ -15,6 +16,7 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         <Hero />
+        <HowItWorks />
         <AppShell />
         <Features />
         <Roadmap />

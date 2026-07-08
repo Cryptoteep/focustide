@@ -185,6 +185,30 @@
   .animate-ring-rotate {
     animation: ft-ring-rotate 24s linear infinite;
   }
+  .animate-wave {
+    animation: ft-wave 12s linear infinite;
+  }
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: ft-gradient-shift 6s ease infinite;
+  }
+  .text-shimmer {
+    background: linear-gradient(90deg, var(--muted-foreground) 0%, var(--foreground) 50%, var(--muted-foreground) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: ft-shimmer 3s linear infinite;
+  }
+  .bg-wave {
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 40px,
+      color-mix(in oklch, var(--brand) 8%, transparent) 40px,
+      color-mix(in oklch, var(--brand) 8%, transparent) 41px
+    );
+  }
 }
 
 @keyframes ft-float {
@@ -199,6 +223,22 @@
 
 @keyframes ft-ring-rotate {
   to { transform: rotate(360deg); }
+}
+
+@keyframes ft-wave {
+  0% { transform: translateX(0) translateZ(0) scaleY(1); }
+  50% { transform: translateX(-25%) translateZ(0) scaleY(0.85); }
+  100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+}
+
+@keyframes ft-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes ft-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* Custom scrollbar */

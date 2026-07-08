@@ -87,6 +87,19 @@ export function SettingsDialog() {
           <Separator />
 
           <section className="space-y-3">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Goals</h4>
+            <NumberField
+              label="Daily focus goal (minutes)"
+              value={settings.dailyGoalMinutes}
+              min={15}
+              max={720}
+              onChange={(v) => updateSettings({ dailyGoalMinutes: v })}
+            />
+          </section>
+
+          <Separator />
+
+          <section className="space-y-3">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Automation</h4>
             <ToggleRow
               label="Auto-start breaks"

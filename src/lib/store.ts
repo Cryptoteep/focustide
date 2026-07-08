@@ -17,6 +17,7 @@ export const DEFAULT_SETTINGS: Settings = {
   volume: 0.7,
   accent: 'tide',
   showSecondsInTitle: true,
+  dailyGoalMinutes: 120,
 };
 
 function uid(): string {

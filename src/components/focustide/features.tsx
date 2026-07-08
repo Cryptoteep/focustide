@@ -23,7 +23,7 @@ const features = [
   {
     icon: Timer,
     title: 'Adaptive Pomodoro timer',
-    body: 'Customizable focus, short-break and long-break durations with an accurate wall-clock engine that survives tab throttling and sleep.',
+    body: 'Customizable focus, short-break and long-break durations with quick-start presets (15/25/50/90 min) and an accurate wall-clock engine that survives tab throttling and sleep.',
     accent: 'var(--brand)',
   },
   {
@@ -40,8 +40,8 @@ const features = [
   },
   {
     icon: Flame,
-    title: 'Streaks that motivate',
-    body: 'Daily streaks, longest streak and a rolling 30-day activity heatmap keep your routine honest without shame.',
+    title: 'Streaks & daily goals',
+    body: 'Daily streaks, longest streak, a 35-day activity heatmap and a daily focus goal with a live progress ring.',
     accent: 'var(--chart-5)',
   },
   {
@@ -52,8 +52,8 @@ const features = [
   },
   {
     icon: Bell,
-    title: 'Gentle notifications',
-    body: 'Optional browser notifications and Web-Audio chimes — synthesized in-browser, no audio files, no network.',
+    title: 'Ambient soundscapes',
+    body: 'Six procedurally-synthesized ambient sounds (rain, waves, cafe, forest, white & brown noise) — pure Web Audio, zero files.',
     accent: 'var(--brand)',
   },
   {
